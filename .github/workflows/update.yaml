@@ -1,4 +1,4 @@
-name: Update packages
+name: Update flake and packages
 
 on:
   workflow_dispatch:
@@ -19,14 +19,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        
+      - name: Configure Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@main
 
-      - name: Run update scripts
+      - name: Update flake lock file
+        run: |
+          nix flake update
+
+      - name: Run package update scripts
         run: |
           pkgs/osu-lazer-bin/update.sh
 
-      - name: Commit
+      - name: Run flake checks
+        run: |
+          nix flake check
+
+      - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: "ci: update all packages"
+          commit_message: "ci: update ..."
+          commit_author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"

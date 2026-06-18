@@ -1,4 +1,4 @@
-name: Update flake and packages
+name: Update nixpkgs and packages
 
 on:
   workflow_dispatch:
@@ -25,9 +25,9 @@ jobs:
       - name: Configure Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@main
 
-      - name: Update flake lock file
+      - name: Update nixpkgs flake input
         run: |
-          nix flake update
+          nix flake update nixpkgs
 
       - name: Run package update scripts
         run: |
@@ -40,5 +40,5 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: "ci: update ..."
+          commit_message: "ci: update nixpkgs and packages"
           commit_author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"

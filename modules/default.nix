@@ -52,7 +52,7 @@
             socks = allowNull (strOption null);
           };
 
-          dataDir = pathOption "${config.xdg.dataHome}/osu";
+          dataDir = defaultText (pathOption "${config.xdg.dataHome}/osu") "\${config.xdg.dataHome}/osu";
         };
 
       home.ifEnabled =

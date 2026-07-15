@@ -51,6 +51,8 @@
             https = allowNull (strOption cfg.proxy.http);
             socks = allowNull (strOption null);
           };
+
+          dataDir = pathOption "${config.xdg.dataHome}/osu";
         };
 
       home.ifEnabled =
@@ -59,8 +61,8 @@
           home.packages = lib.optionals (cfg.package != null) [ cfg.package ];
 
           home.activation.nix-osu = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-            mkdir -p $XDG_DATA_HOME/osu
-            cd $XDG_DATA_HOME/osu
+            mkdir -p "${cfg.dataDir}"
+            cd "${cfg.dataDir}"
 
             ${lib.getExe pkgs.crudini} --merge framework.ini < ${cfg.frameworkIniOverridesFile}
             ${lib.getExe pkgs.crudini} --merge game.ini < ${cfg.gameIniOverridesFile}
